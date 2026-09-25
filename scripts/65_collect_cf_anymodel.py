@@ -51,7 +51,7 @@ def resolve(model):
 
 def setup(spec, device):
     """Return (model, prep_fn, letter_ids, cleanup_model_id). prep_fn(row,name,ui,uc) -> inputs on device."""
-    from sae_steering.steering import get_letter_token_ids
+    from moground.steering import get_letter_token_ids
     if spec["type"] == "qwen":
         from transformers import (AutoProcessor, Qwen2_5_VLForConditionalGeneration,
                                   Qwen2VLForConditionalGeneration, Qwen3VLMoeForConditionalGeneration)
@@ -97,7 +97,7 @@ def setup(spec, device):
         return model, prep, lids, spec["model_id"]
 
     if spec["type"] == "llava":
-        mod = importlib.import_module(f"sae_steering.models_{spec['module']}")
+        mod = importlib.import_module(f"moground.models_{spec['module']}")
         load_m = getattr(mod, f"load_{spec['module']}"); _bm = mod._build_messages
         model, proc = load_m(device=device)
         lids = torch.tensor([proc.tokenizer.encode(l, add_special_tokens=False)[-1] for l in ["A", "B", "C", "D"]],

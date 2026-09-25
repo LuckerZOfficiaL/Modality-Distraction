@@ -29,7 +29,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from sae_steering.oracle_clients import make_client
+from moground.oracle_clients import make_client
 
 
 SYSTEM = (

@@ -30,7 +30,7 @@ from pathlib import Path
 
 from tqdm import tqdm
 
-from sae_steering.models import load_qwen_vl, predict_mcq
+from moground.models import load_qwen_vl, predict_mcq
 
 
 def load_jsonl(p: Path) -> list[dict]:

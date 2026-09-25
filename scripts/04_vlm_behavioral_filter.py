@@ -29,7 +29,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from sae_steering.models import load_qwen_vl, predict_mcq
+from moground.models import load_qwen_vl, predict_mcq
 
 
 def load_split(path: Path) -> list[dict]:

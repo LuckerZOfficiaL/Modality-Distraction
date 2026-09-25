@@ -38,7 +38,7 @@ import torch
 import yaml
 import matplotlib.pyplot as plt
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def main() -> None:

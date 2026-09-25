@@ -53,7 +53,7 @@ SOURCES = [
 
 def rel_img(p):
     p = str(p)
-    return p.split("sae_steering/", 1)[1] if "sae_steering/" in p else p
+    return p.split("moground/", 1)[1] if "moground/" in p else p
 
 
 def opts(o):

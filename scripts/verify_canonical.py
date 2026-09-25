@@ -15,12 +15,12 @@ from pathlib import Path
 
 import yaml
 
-from sae_steering.canonical_eval import (
+from moground.canonical_eval import (
     load_canonical_pool,
     run_canonical_forward,
 )
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import get_letter_token_ids
+from moground.models import load_qwen_vl
+from moground.steering import get_letter_token_ids
 
 
 def main() -> None:

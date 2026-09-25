@@ -1,11 +1,11 @@
 seed: 0
 
 paths:
-  data_root: /home/ubuntu/thesis/sae_steering/data
-  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/roco/pilot100
-  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/roco/images
-  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
-  runs: /home/ubuntu/thesis/sae_steering/runs
+  data_root: data
+  dm_dir: data/dm/roco/pilot100
+  dm_images: data/dm/roco/images
+  cc3m_dir: data/pretraining/cc3m_subset
+  runs: runs
 
 seeds:
   source: dci      # generic-photo prompt; no roco-specific prompt yet

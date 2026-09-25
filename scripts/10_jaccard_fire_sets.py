@@ -13,7 +13,7 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def jaccard_matrix(F: np.ndarray) -> np.ndarray:

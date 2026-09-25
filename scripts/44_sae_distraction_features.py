@@ -25,7 +25,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import StratifiedKFold, cross_val_score
 from sklearn.metrics import roc_auc_score
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def main() -> None:

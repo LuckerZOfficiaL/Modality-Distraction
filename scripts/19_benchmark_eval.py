@@ -31,14 +31,14 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from sae_steering.canonical_eval import (
+from moground.canonical_eval import (
     load_pool_rows_jsonl,
     random_matched_unit_vector,
     run_canonical_forward as run_forward,
 )
-from sae_steering.models import load_qwen_vl
-from sae_steering.sae import SAEConfig, TopKSAE
-from sae_steering.steering import AdditiveHook, SAEHook, get_letter_token_ids
+from moground.models import load_qwen_vl
+from moground.sae import SAEConfig, TopKSAE
+from moground.steering import AdditiveHook, SAEHook, get_letter_token_ids
 
 
 METHODS = ["baseline", "additive_v_causal", "random_matched"]

@@ -4,7 +4,7 @@ Why the human set: it carries no oracle certificate, so evaluating models from t
 the oracles that certified \dsname{} introduces no circularity. It is also the hardest surface we
 have (base v-distraction $0.274$ vs $0.076$ on \dsname{} test).
 
-Prompt parity with the open-model runs is the point of this script. `sae_steering.steering.
+Prompt parity with the open-model runs is the point of this script. `moground.steering.
 build_messages` produces, in order: an optional `Caption: ...` text block, the image, then
 `Question: ...` with the lettered options and `Reply with exactly one letter (A, B, C, or D) and
 nothing else.` We reproduce that ordering exactly, in a single user turn with no system message,
@@ -150,8 +150,8 @@ def run_gemini_sync(model, key, workers=8):
 def run_gemini(model, key, poll):
     import sys
     sys.path.insert(0, str(ROOT / "src"))
-    from sae_steering.oracle_batch import submit_and_wait
-    from sae_steering.oracle_clients import ImageInput, make_client
+    from moground.oracle_batch import submit_and_wait
+    from moground.oracle_clients import ImageInput, make_client
 
     rs = rows()
     reqs = []

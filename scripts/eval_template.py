@@ -20,15 +20,15 @@ import torch
 import yaml
 from tqdm import tqdm
 
-from sae_steering.canonical_eval import (
+from moground.canonical_eval import (
     load_canonical_pool,
     load_cf_activations,
     random_matched_unit_vector,
     run_canonical_forward,
     compare_to_baseline,
 )
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.steering import (
     AdditiveHook,
     get_letter_token_ids,
 )

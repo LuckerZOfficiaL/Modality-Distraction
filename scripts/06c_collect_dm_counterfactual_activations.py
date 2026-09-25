@@ -37,9 +37,9 @@ import yaml
 from qwen_vl_utils import process_vision_info
 from tqdm import tqdm
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.activations import ActivationExtractor
-from sae_steering.steering import get_letter_token_ids
+from moground.models import load_qwen_vl
+from moground.activations import ActivationExtractor
+from moground.steering import get_letter_token_ids
 
 
 def build_messages(row: dict, kind: str, max_pixels: int | None = None) -> list[dict]:

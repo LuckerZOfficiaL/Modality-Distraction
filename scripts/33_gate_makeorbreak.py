@@ -35,7 +35,7 @@ from sklearn.model_selection import cross_val_predict
 from sklearn.metrics import roc_auc_score
 import warnings; warnings.filterwarnings("ignore")
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def _atoms(feat_dir: Path, L: int, topn: int):

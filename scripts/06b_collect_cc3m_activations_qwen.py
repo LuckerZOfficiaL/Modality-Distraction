@@ -32,8 +32,8 @@ import yaml
 from qwen_vl_utils import process_vision_info
 from tqdm import tqdm
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.activations import ActivationExtractor
+from moground.models import load_qwen_vl
+from moground.activations import ActivationExtractor
 
 
 def build_messages(image_path: str, caption: str,

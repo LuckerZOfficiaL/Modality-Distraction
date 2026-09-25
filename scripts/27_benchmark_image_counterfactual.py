@@ -40,8 +40,8 @@ import torch
 from tqdm import tqdm
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.steering import (
     build_messages, AdditiveHook, get_letter_token_ids, CANONICAL_MAX_PIXELS, score_row,
 )
 

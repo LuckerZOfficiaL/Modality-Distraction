@@ -170,7 +170,7 @@ def make_tokenizer(family, proc, device, llmod=None, model_id=""):
 
         # Must match the eval-side tokenization exactly (scripts/61 make_hf): a train/eval BOS
         # mismatch is worse than a consistent double-BOS.
-        from sae_steering.steering import special_token_kwargs
+        from moground.steering import special_token_kwargs
         stk = special_token_kwargs(model_id)   # {} for every pre-existing backbone
 
         def _pack_hf(user, image, assistant_text):
@@ -321,7 +321,7 @@ def main() -> None:
     elif family == "hf":
         model, proc = load_hf_family(args.model, args.device)
     else:
-        llmod = importlib.import_module(f"sae_steering.models_{args.model}")
+        llmod = importlib.import_module(f"moground.models_{args.model}")
         model, proc = getattr(llmod, f"load_{args.model}")(device=args.device)
     tok, replay_tok = make_tokenizer(family, proc, args.device, llmod,
                                      model_id=HF_SPECS.get(args.model, ""))

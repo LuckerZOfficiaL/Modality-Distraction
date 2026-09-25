@@ -76,8 +76,8 @@ def _strip_json(s: str) -> str:
 
 
 def cmd_generate(cfg, args):
-    from sae_steering.oracle_clients import GeminiClient, ImageInput
-    from sae_steering.oracle_batch import submit_and_wait
+    from moground.oracle_clients import GeminiClient, ImageInput
+    from moground.oracle_batch import submit_and_wait
 
     work = _work_dir(cfg, args.split, args.work_suffix); work.mkdir(parents=True, exist_ok=True)
     # --labels all: ignore the grounding certificate and generate for EVERY item. This is the

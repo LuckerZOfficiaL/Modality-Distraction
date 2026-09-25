@@ -25,9 +25,9 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from sae_steering.oracle_clients import ImageInput, make_client
-from sae_steering.oracle_batch import submit_and_wait as _batch_submit_and_wait
-from sae_steering.oracle_prompts import (
+from moground.oracle_clients import ImageInput, make_client
+from moground.oracle_batch import submit_and_wait as _batch_submit_and_wait
+from moground.oracle_prompts import (
     ANSWER_INSTRUCTIONS,
     GENERATION_INSTRUCTIONS,
     GENERATION_INSTRUCTIONS_DCI_HARD_T,

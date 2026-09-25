@@ -22,7 +22,7 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def load_dm_meta(dm_all_path: Path) -> dict[str, dict]:

@@ -17,7 +17,7 @@ from pathlib import Path
 import yaml
 from tqdm import tqdm
 
-from sae_steering.models_llavanext import load_llavanext, predict_mcq
+from moground.models_llavanext import load_llavanext, predict_mcq
 
 
 def load_split(path: Path) -> list[dict]:

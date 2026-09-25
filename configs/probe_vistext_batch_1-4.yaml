@@ -1,11 +1,11 @@
 seed: 0
 
 paths:
-  data_root: /home/ubuntu/thesis/sae_steering/data
-  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/vistext/sonnet/batch_1-4
-  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/vistext/images
-  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
-  runs: /home/ubuntu/thesis/sae_steering/runs
+  data_root: data
+  dm_dir: data/dm/vistext/sonnet/batch_1-4
+  dm_images: data/dm/vistext/images
+  cc3m_dir: data/pretraining/cc3m_subset
+  runs: runs
 
 model:
   name: Qwen/Qwen2.5-VL-3B-Instruct

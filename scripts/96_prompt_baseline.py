@@ -64,7 +64,7 @@ def make_qwen(model_id, cls_tag, device):
     from qwen_vl_utils import process_vision_info
     from transformers import (AutoProcessor, Qwen2_5_VLForConditionalGeneration,
                               Qwen2VLForConditionalGeneration, Qwen3VLMoeForConditionalGeneration)
-    from sae_steering.steering import get_letter_token_ids
+    from moground.steering import get_letter_token_ids
     cls = {"qwen2_5_vl": Qwen2_5_VLForConditionalGeneration,
            "qwen2_vl": Qwen2VLForConditionalGeneration,
            "qwen3_vl_moe": Qwen3VLMoeForConditionalGeneration}[cls_tag]
@@ -102,7 +102,7 @@ def make_qwen(model_id, cls_tag, device):
 
 def make_hf(model_id, device):
     from transformers import AutoModelForImageTextToText, AutoProcessor
-    from sae_steering.steering import get_letter_token_ids
+    from moground.steering import get_letter_token_ids
     model = AutoModelForImageTextToText.from_pretrained(
         model_id, torch_dtype=torch.bfloat16, low_cpu_mem_usage=True,
         trust_remote_code=True).to(device).eval()

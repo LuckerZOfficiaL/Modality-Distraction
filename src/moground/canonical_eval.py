@@ -27,7 +27,7 @@ import numpy as np
 import torch
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.steering import (
+from moground.steering import (
     CANONICAL_CF_SUBDIR,
     SteeringHook,
     build_messages,

@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from sae_steering.oracle_clients import ImageInput, make_client
+from moground.oracle_clients import ImageInput, make_client
 
 
 def main():

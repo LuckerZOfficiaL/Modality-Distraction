@@ -24,7 +24,7 @@ import yaml
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def main() -> None:

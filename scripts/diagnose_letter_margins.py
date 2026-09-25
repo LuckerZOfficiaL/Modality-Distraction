@@ -19,8 +19,8 @@ from pathlib import Path
 import torch
 import yaml
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.steering import (
     baseline_rows_needed, build_messages, get_letter_token_ids,
     load_distraction_pool, load_oracle_passed, select_pool,
 )

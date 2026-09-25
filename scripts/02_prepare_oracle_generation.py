@@ -17,7 +17,7 @@ from pathlib import Path
 
 import yaml
 
-from sae_steering.oracle_prompts import (
+from moground.oracle_prompts import (
     GENERATION_INSTRUCTIONS,
     GENERATION_INSTRUCTIONS_DCI_HARD_T,
     GENERATION_INSTRUCTIONS_DCI_HARD_T_TONLY,

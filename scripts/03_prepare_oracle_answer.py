@@ -26,7 +26,7 @@ from pathlib import Path
 
 import yaml
 
-from sae_steering.oracle_prompts import ANSWER_INSTRUCTIONS
+from moground.oracle_prompts import ANSWER_INSTRUCTIONS
 
 
 MODE_DESC = {

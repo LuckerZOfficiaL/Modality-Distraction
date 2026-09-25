@@ -29,7 +29,7 @@ from pathlib import Path
 
 import yaml
 
-from sae_steering.oracle_clients import make_client
+from moground.oracle_clients import make_client
 
 _spec = importlib.util.spec_from_file_location("_opa", Path(__file__).parent / "oracle_pipeline_api.py")
 _opa = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_opa)  # type: ignore

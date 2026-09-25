@@ -15,7 +15,7 @@ import torch
 from PIL import Image
 from tqdm import tqdm
 
-from sae_steering.steering import SteeringHook
+from moground.steering import SteeringHook
 
 
 def build_messages(row: dict) -> list[dict]:

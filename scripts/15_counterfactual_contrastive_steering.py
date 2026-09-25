@@ -27,8 +27,8 @@ import torch
 import yaml
 from tqdm import tqdm
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.steering import (
     POOL_CHOICES, AdditiveTwoHook, baseline_rows_needed,
     fix_negative_args, get_letter_token_ids, load_distraction_pool,
     load_oracle_passed, score_row, select_pool,

@@ -17,7 +17,7 @@ from pathlib import Path
 
 from datasets import load_dataset
 
-from sae_steering.benchmarks import prep_mmstar, prep_naturalbench, prep_vilp
+from moground.benchmarks import prep_mmstar, prep_naturalbench, prep_vilp
 
 
 def main() -> None:

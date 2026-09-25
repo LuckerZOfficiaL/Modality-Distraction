@@ -36,7 +36,7 @@ from pathlib import Path
 
 import yaml
 
-from sae_steering.canonical_eval import load_canonical_pool
+from moground.canonical_eval import load_canonical_pool
 
 
 def main() -> None:
@@ -62,8 +62,8 @@ def main() -> None:
         # Bypass the cf-store filter by pointing at a temporary fake subdir, or
         # by editing load_canonical_pool. Simpler: do a manual run that skips
         # the cf-store filter.
-        from sae_steering.canonical_eval import _parse_pool_spec
-        from sae_steering.steering import load_distraction_pool
+        from moground.canonical_eval import _parse_pool_spec
+        from moground.steering import load_distraction_pool
         components = _parse_pool_spec(args.pool)
         print(f"[collect] components={components}")
 

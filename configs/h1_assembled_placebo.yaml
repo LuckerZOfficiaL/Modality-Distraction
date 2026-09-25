@@ -4,8 +4,8 @@ dm:
 model:
   name: Qwen/Qwen2.5-VL-3B-Instruct
 paths:
-  data_root: /home/ubuntu/thesis/sae_steering/data
+  data_root: data
   dm_dir: data/dm/h1_assembled_placebo
-  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
-  runs: /home/ubuntu/thesis/sae_steering/runs
+  dm_images: data/dm/images
+  runs: runs
 seed: 0

@@ -23,15 +23,15 @@ import torch
 import yaml
 from tqdm import tqdm
 
-from sae_steering.canonical_eval import (
+from moground.canonical_eval import (
     SetActivationHook,
     load_canonical_pool,
     load_pool_rows_jsonl,
     load_cf_activations,
     run_canonical_forward as run_forward,
 )
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import get_letter_token_ids
+from moground.models import load_qwen_vl
+from moground.steering import get_letter_token_ids
 
 
 def main() -> None:

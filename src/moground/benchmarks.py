@@ -1,7 +1,7 @@
 """External MCQ benchmark adapters for the canonical steering harness.
 
 Each loader materializes a benchmark into the canonical row schema consumed by
-``sae_steering.steering.build_messages``:
+``moground.steering.build_messages``:
 
     {
       "candidate_id": str,            # globally unique

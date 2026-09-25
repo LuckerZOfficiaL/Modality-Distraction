@@ -23,7 +23,7 @@ import torch
 import yaml
 from tqdm import tqdm
 
-from sae_steering.sae import (
+from moground.sae import (
     SAEConfig,
     TopKSAE,
     reconstruction_loss,

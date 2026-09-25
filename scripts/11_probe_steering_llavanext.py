@@ -9,13 +9,13 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.models_llavanext import load_llavanext
-from sae_steering.steering import (
+from moground.models_llavanext import load_llavanext
+from moground.steering import (
     POOL_CHOICES, AdditiveHook, baseline_rows_needed, compute_summary,
     get_letter_token_ids, load_resume_state, print_summary,
     run_baseline_phase, run_hooked_phase, select_pool,
 )
-from sae_steering.steering_llavanext import score_row, load_oracle_passed_llavanext
+from moground.steering_llavanext import score_row, load_oracle_passed_llavanext
 
 
 def compute_probe_vectors(data_root: Path, layers, device) -> dict[int, torch.Tensor]:

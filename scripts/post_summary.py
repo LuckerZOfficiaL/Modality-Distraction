@@ -9,7 +9,7 @@ from __future__ import annotations
 import argparse, json
 from pathlib import Path
 import yaml
-from sae_steering.steering import compute_summary, print_summary, load_oracle_passed, baseline_rows_needed
+from moground.steering import compute_summary, print_summary, load_oracle_passed, baseline_rows_needed
 
 
 def main():

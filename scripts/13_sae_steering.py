@@ -34,9 +34,9 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.sae import TopKSAE, SAEConfig
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.sae import TopKSAE, SAEConfig
+from moground.steering import (
     fix_negative_args,
     POOL_CHOICES, SAEHook, baseline_rows_needed, compute_summary,
     get_letter_token_ids, load_distraction_pool, load_oracle_passed,

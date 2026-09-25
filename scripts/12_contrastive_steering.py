@@ -9,7 +9,7 @@ activations only:
 Sign convention: alpha > 0 pushes vision, alpha < 0 pushes text.
 
 Eval pool selectable via --pool {test, unseen, fails, all}; see
-sae_steering.steering for definitions. All 422 splits/* items are
+moground.steering for definitions. All 422 splits/* items are
 oracle-passed by construction; oracle-failed items never reach disk.
 """
 from __future__ import annotations
@@ -22,8 +22,8 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import (
+from moground.models import load_qwen_vl
+from moground.steering import (
     fix_negative_args,
     POOL_CHOICES, AdditiveHook, baseline_rows_needed, compute_summary,
     get_letter_token_ids, load_distraction_pool, load_oracle_passed,

@@ -30,7 +30,7 @@ import numpy as np
 import torch
 from tqdm import tqdm
 
-from sae_steering.steering import get_letter_token_ids, special_token_kwargs
+from moground.steering import get_letter_token_ids, special_token_kwargs
 
 ROOT = Path(__file__).resolve().parent.parent
 MAXPX = 1024 * 1024

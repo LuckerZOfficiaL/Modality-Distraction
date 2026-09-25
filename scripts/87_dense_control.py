@@ -30,7 +30,7 @@ import yaml
 from tqdm import tqdm
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.steering import get_letter_token_ids
+from moground.steering import get_letter_token_ids
 
 _spec = importlib.util.spec_from_file_location("_c6", Path(__file__).parent / "06c_collect_dm_counterfactual_activations.py")
 _c6 = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_c6)  # type: ignore

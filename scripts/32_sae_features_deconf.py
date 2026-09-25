@@ -28,7 +28,7 @@ import numpy as np
 import torch
 import yaml
 
-from sae_steering.sae import TopKSAE, SAEConfig
+from moground.sae import TopKSAE, SAEConfig
 
 
 def _old_top_vision(path: Path) -> set:

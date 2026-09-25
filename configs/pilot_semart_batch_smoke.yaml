@@ -1,11 +1,11 @@
 seed: 0
 
 paths:
-  data_root: /home/ubuntu/thesis/sae_steering/data
-  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/semart/batch_smoke
-  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/semart/images
-  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
-  runs: /home/ubuntu/thesis/sae_steering/runs
+  data_root: data
+  dm_dir: data/dm/semart/batch_smoke
+  dm_images: data/dm/semart/images
+  cc3m_dir: data/pretraining/cc3m_subset
+  runs: runs
 
 seeds:
   source: dci      # use generic-photo prompt; no semart-specific prompt exists yet

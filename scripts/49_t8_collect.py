@@ -61,8 +61,8 @@ def main() -> None:
     if args.model == "qwen" and args.qwen_infer:
         # run Qwen inference on all rows, reusing 06c's exact V/T/VT message builder
         import importlib.util, torch
-        from sae_steering.models import load_qwen_vl
-        from sae_steering.steering import get_letter_token_ids
+        from moground.models import load_qwen_vl
+        from moground.steering import get_letter_token_ids
         from qwen_vl_utils import process_vision_info
         _sp = importlib.util.spec_from_file_location("_c6", Path(__file__).parent / "06c_collect_dm_counterfactual_activations.py")
         _c6 = importlib.util.module_from_spec(_sp); _sp.loader.exec_module(_c6)
@@ -117,7 +117,7 @@ def main() -> None:
         return
 
     # llavanext: run predict_mcq
-    from sae_steering.models_llavanext import load_llavanext as load_m, predict_mcq
+    from moground.models_llavanext import load_llavanext as load_m, predict_mcq
     done = set()
     if out.exists():
         for l in out.read_text().splitlines():

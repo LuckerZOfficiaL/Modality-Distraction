@@ -31,8 +31,8 @@ import yaml
 from PIL import Image
 from tqdm import tqdm
 
-from sae_steering.activations import ActivationExtractor
-from sae_steering.models_llavanext import load_llavanext
+from moground.activations import ActivationExtractor
+from moground.models_llavanext import load_llavanext
 
 
 def build_prompt(image_path: str, caption: str, processor) -> tuple[str, Image.Image]:

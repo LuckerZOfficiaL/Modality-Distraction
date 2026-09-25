@@ -35,7 +35,7 @@ PATCH = 28 * 28  # Qwen visual token = 28x28 px; budget given in TOKENS -> max_p
 def load_qwen(model_id, cls_name, device):
     from transformers import AutoProcessor, Qwen2_5_VLForConditionalGeneration, Qwen2VLForConditionalGeneration
     from qwen_vl_utils import process_vision_info
-    from sae_steering.steering import get_letter_token_ids
+    from moground.steering import get_letter_token_ids
     _c = importlib.util.spec_from_file_location("_c6", ROOT / "06c_collect_dm_counterfactual_activations.py")
     c6 = importlib.util.module_from_spec(_c); _c.loader.exec_module(c6)
     cls = {"qwen2_5_vl": Qwen2_5_VLForConditionalGeneration, "qwen2_vl": Qwen2VLForConditionalGeneration}[cls_name]

@@ -29,8 +29,8 @@ from PIL import Image, ImageFilter
 from tqdm import tqdm
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import get_letter_token_ids
+from moground.models import load_qwen_vl
+from moground.steering import get_letter_token_ids
 
 MAXPX = 1024 * 1024
 

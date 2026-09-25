@@ -1,11 +1,11 @@
 seed: 0
 
 paths:
-  data_root: /home/ubuntu/thesis/sae_steering/data
-  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/sonnet/batch_1-3
-  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
-  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/diversified_v1
-  runs: /home/ubuntu/thesis/sae_steering/runs
+  data_root: data
+  dm_dir: data/dm/sonnet/batch_1-3
+  dm_images: data/dm/images
+  cc3m_dir: data/pretraining/diversified_v1
+  runs: runs
 
 seeds:
   source: dci

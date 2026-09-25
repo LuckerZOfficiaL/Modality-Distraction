@@ -24,7 +24,7 @@ from PIL import Image
 from sparsify import Sae
 from tqdm import tqdm
 
-from sae_steering.models_llavanext import load_llavanext
+from moground.models_llavanext import load_llavanext
 
 
 def build_prompt(row, processor, *, guided: bool):

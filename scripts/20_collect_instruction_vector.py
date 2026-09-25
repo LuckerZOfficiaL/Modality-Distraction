@@ -34,9 +34,9 @@ import yaml
 from qwen_vl_utils import process_vision_info
 from tqdm import tqdm
 
-from sae_steering.canonical_eval import load_canonical_pool
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import CANONICAL_CF_SUBDIR, build_messages
+from moground.canonical_eval import load_canonical_pool
+from moground.models import load_qwen_vl
+from moground.steering import CANONICAL_CF_SUBDIR, build_messages
 
 
 def main() -> None:

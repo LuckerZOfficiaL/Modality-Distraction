@@ -71,7 +71,7 @@ mkdir -p .credentials          # put your Gemini / Anthropic keys here; see scri
 | `scripts/05, 08, build_pretraining_diversified, 06-14*` | SAE pretraining corpus, training, feature analysis |
 | `scripts/108-109, 126-129` | human-audit tooling and analysis |
 | `scripts/136-137` | builders that produced the released dataset and SAE bundles |
-| `src/sae_steering/` | shared library: model loading, steering hooks, SAE, oracle clients |
+| `src/moground/` | shared library: model loading, steering hooks, SAE, oracle clients |
 | `configs/` | per-batch generation configs |
 
 ## Reproducing the headline numbers

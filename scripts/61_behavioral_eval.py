@@ -95,7 +95,7 @@ def make_qwen(spec, device):
     from transformers import (AutoProcessor, Qwen2_5_VLForConditionalGeneration,
                               Qwen2VLForConditionalGeneration, Qwen3VLMoeForConditionalGeneration)
     from qwen_vl_utils import process_vision_info
-    from sae_steering.steering import get_letter_token_ids
+    from moground.steering import get_letter_token_ids
     _s = importlib.util.spec_from_file_location("_c6", ROOT / "06c_collect_dm_counterfactual_activations.py")
     _c6 = importlib.util.module_from_spec(_s); _s.loader.exec_module(_c6)
     bm, MAXPX = _c6.build_messages, 1024 * 1024
@@ -132,7 +132,7 @@ def make_hf(spec, device):
     import torch
     from transformers import AutoModelForImageTextToText, AutoProcessor
     from PIL import Image
-    from sae_steering.steering import get_letter_token_ids, special_token_kwargs
+    from moground.steering import get_letter_token_ids, special_token_kwargs
     try:
         model = AutoModelForImageTextToText.from_pretrained(
             spec["model_id"], dtype=torch.bfloat16, device_map=device, trust_remote_code=True).eval()
@@ -175,7 +175,7 @@ def make_hf(spec, device):
 
 # ---- llava-family adapter (reuse module predict_mcq) ----
 def make_llava(spec, device):
-    mod = importlib.import_module(f"sae_steering.models_{spec['module']}")
+    mod = importlib.import_module(f"moground.models_{spec['module']}")
     load = getattr(mod, f"load_{spec['module']}"); predict_mcq = mod.predict_mcq
     model, proc = load(device=device)
     if spec.get("adapter"):
@@ -194,7 +194,7 @@ def make_llava(spec, device):
 
 # ---- gemini adapter (multimodal API; accuracy only) ----
 def make_gemini(spec, device):
-    from sae_steering.oracle_clients import make_client, ImageInput
+    from moground.oracle_clients import make_client, ImageInput
     client = make_client("gemini", model=spec["model_id"])
     sysmsg = "Answer the multiple-choice question with exactly one letter (A, B, C, or D)."
 

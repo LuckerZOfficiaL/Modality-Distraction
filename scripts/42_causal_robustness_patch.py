@@ -32,9 +32,9 @@ import yaml
 from tqdm import tqdm
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.models import load_qwen_vl
-from sae_steering.steering import get_letter_token_ids
-from sae_steering.canonical_eval import SetActivationHook
+from moground.models import load_qwen_vl
+from moground.steering import get_letter_token_ids
+from moground.canonical_eval import SetActivationHook
 
 # reuse 06c's exact kind-specific message builder (so patched state matches collection)
 _spec = importlib.util.spec_from_file_location("_c6", Path(__file__).parent / "06c_collect_dm_counterfactual_activations.py")

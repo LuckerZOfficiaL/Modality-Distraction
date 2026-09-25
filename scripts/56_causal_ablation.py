@@ -31,8 +31,8 @@ import yaml
 from tqdm import tqdm
 from qwen_vl_utils import process_vision_info
 
-from sae_steering.sae import TopKSAE, SAEConfig
-from sae_steering.steering import get_letter_token_ids
+from moground.sae import TopKSAE, SAEConfig
+from moground.steering import get_letter_token_ids
 
 _spec = importlib.util.spec_from_file_location("_c6", Path(__file__).parent / "06c_collect_dm_counterfactual_activations.py")
 _c6 = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(_c6)  # type: ignore
@@ -42,10 +42,10 @@ MAXPX = 1024 * 1024
 
 def load_model(name, device):
     if name == "qwen":
-        from sae_steering.models import load_qwen_vl
+        from moground.models import load_qwen_vl
         return load_qwen_vl(device=device)
     if name == "llavanext":
-        from sae_steering.models_llavanext import load_llavanext
+        from moground.models_llavanext import load_llavanext
         return load_llavanext(device=device)
 
 
