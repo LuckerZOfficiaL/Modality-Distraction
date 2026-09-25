@@ -1,4 +1,4 @@
-r"""Cross-backbone agreement on flip destinations, per placebo arm (rebuttal asset).
+r"""Cross-backbone agreement on flip destinations, per placebo arm.
 
 Question (raised by the user, 2026-08-17): "caption-induced answer" -- is the flip destination
 actually determined by the caption, or is it just whatever wrong option the model happened to

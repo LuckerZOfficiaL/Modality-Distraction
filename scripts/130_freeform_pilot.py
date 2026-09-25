@@ -1,4 +1,4 @@
-"""Free-form pilot on MoGround's certified vision items (rebuttal asset + follow-up feasibility).
+"""Free-form pilot on MoGround's certified vision items.
 
 The paper measures distraction with multiple-choice items. A reviewer will ask whether the effect
 is an artifact of the MCQ format, since VLMs are mostly used in free-form generation. This script

@@ -36,7 +36,7 @@ DR = ROOT / "data"
 # frac-stochastically-larger 0.88->0.84). Every non-cohort backbone added to data/activations/ MUST
 # be listed here in the same commit that collects its store.
 EXCLUDED = {# dropped from the paper
-            # 8th-backbone rebuttal asset, not in the cohort
+            # not in the cohort
             "OpenGVLab_InternVL3-14B-hf",     # 2nd large model (scale control), not in the cohort
             "mistralai_Mistral-Small-3.1-24B-Instruct-2503",  # 3rd large model (4th family), not in the cohort
             # size-vs-idiosyncrasy campaign (task #25) -- registered BEFORE any cf-store exists,
