@@ -1,86 +1,101 @@
-# MoGround
+# Modality Distraction (MoGround)
 
-**Modality distraction in vision--language models: a certified benchmark, a measurement, and a
-training-time repair.**
+Code for **MoGround: Measuring and Mitigating Modality Distraction in Vision-Language Models**.
 
-A VLM answers a question correctly from the image alone. Add a caption that is *certified to
-contain no answer*, and the model changes its mind and gets it wrong. That event is **modality
-distraction**, and measuring it requires knowing that the item was answerable from one modality in
-the first place, which existing probes rarely establish. This repository builds the instrument,
-measures the failure across seven backbones and four visual domains, and repairs it.
+A VLM answers a question correctly from the image alone. Add a caption that contains no answer, and
+the model changes its mind and gets it wrong. That event is **modality distraction**. This
+repository holds the pipeline that builds the benchmark, the evaluation harness that measures the
+failure, and the mitigation that removes half of it.
 
-## What is here
+## Released artifacts
 
-**1. MoGround, a certified benchmark.** Every item is generated from a real image--caption pair
-and then answered three times by an oracle, from the image alone (`V`), the text alone (`T`), and
-both (`VT`). Only items whose answers match a single-modality signature survive: a vision-grounded
-item is one the oracle gets right from `V` and `VT` but wrong from `T`, and symmetrically for
-text. The gate is not a formality, **74.5% of generated candidates fail it**, and what remains is
-3,418 items across natural photos (DCI), statistical charts (VisText), fine art (SemArt), and
-radiology (ROCO), with a fixed 60/20/20 split. Two harder pools accompany it: a hand-written
-subset (**MoGround-Human**, 125 items) and a companion pool assembled from A-OKVQA and RACE-high
-that has natural headroom on both sides.
+| artifact | where |
+|---|---|
+| **Dataset** — all three pools, splits, human audits, image manifest | https://huggingface.co/datasets/LuckerZ/MoGround |
+| **Sparse autoencoders** — 7 checkpoints for Qwen2.5-VL-3B and LLaVA-NeXT-8B | https://huggingface.co/LuckerZ/moground-saes |
+| **Code** — this repository | https://github.com/LuckerZOfficiaL/Modality-Distraction |
 
-**2. The measurement.** Distraction is a *conditional* rate: `v-distraction = P(V+T wrong |
-V-only correct)`, scored only on items a model demonstrably solves from its grounded modality, so
-it always measures a capability the model has and loses. The headline findings:
+The dataset ships no image bytes, because two of the six image sources forbid redistribution.
+Every image is listed in `images/MANIFEST.jsonl` with its upstream identifier and sha256, and
+`prepare_images.py` (in the dataset repo) rebuilds the image folders from the original sources and
+verifies every checksum.
 
-* The widely reported text-over-vision asymmetry is **not universal**. Its direction and size track
-  each model's grounding gap (`r = +0.86` over seven backbones); five of seven show the *reverse*
-  on a ceiling-free pool.
-* Distraction scales inversely with grounding strength in the target modality, `r = -0.90` over 70
-  backbone x domain x modality cells, one line for every backbone, domain, and modality. The
-  relation forecasts a held-out backbone's per-domain profile to within 1--2pp.
-* The failure is consistent with **margin crossing**: an item flips when the irrelevant context
-  pushes its single-modality answer margin below zero, and the answer crystallizes at a late,
-  item-specific commit layer.
+## The three pools
 
-**3. The repair.** Because the certificate labels *which* modality carries each answer, it supplies
-the supervision a fix needs. A LoRA adapter trained on MoGround's train split alone yields a
-**robustness task vector** added at a single strength `w = 0.5`, chosen once on a selection side
-that no reported number touches. It reduces v-distraction on **all seven backbones on all three
-evaluation surfaces** (up to -73%), including pools the fine-tune never saw, at a mean general
-capability cost of **0.1pp**. Inference-time alternatives, prompting, chain-of-thought,
-SAE-feature ablation, dense direction ablation, and probe-gated activation patching, do not beat
-their matched-random nulls.
+| pool | items | what it is |
+|---|---|---|
+| MoGround-Base | 3,418 | oracle-certified single-modality items over four visual domains (photos, charts, paintings, radiology), fixed 60/20/20 split |
+| MoGround-Human | 125 | hand-authored hard subset, captions written to tempt a specific wrong option |
+| MoGround-Retrieved | 4,757 | companion pool (A-OKVQA vision / RACE-high text) with cosine-retrieved cross-modal distractors, post-audit |
+
+Every item is certified answerable from exactly one modality by a three-condition oracle check
+(image alone, text alone, both), so the distraction it measures cannot be explained by the question
+being unanswerable.
+
+## How distraction is scored
+
+Run each item three times: image only (V), context only (T), and both (V+T). Condition on the items
+a model answers correctly from its grounding modality alone:
+
+```
+v-distraction = P(V+T wrong | V-only correct)   over vision-grounded items
+t-distraction = P(V+T wrong | T-only correct)   over text-grounded items
+```
+
+The conditioning is model-relative on purpose: each model is scored on the items it itself solves,
+so distraction always measures a capability the model demonstrably has and then loses.
 
 ## Setup
 
 ```bash
-uv venv && uv sync && source .venv/bin/activate
+git clone https://github.com/LuckerZOfficiaL/Modality-Distraction
+cd Modality-Distraction
+uv sync                        # or: pip install -e .
+
+# data
+hf download LuckerZ/MoGround --repo-type dataset --local-dir data/moground
+python data/moground/prepare_images.py --sources aokvqa cc3m     # see its docstring for the rest
+
+# API oracles (only needed to rebuild the dataset, not to evaluate)
+mkdir -p .credentials          # put your Gemini / Anthropic keys here; see scripts/oracle_smoke.py
 ```
 
-API credentials (oracle generation and certification) live in `.credentials/`; GPU steps expect
-`CUDA_VISIBLE_DEVICES` to be set and are best run under `tmux`.
+## Layout
 
-## Using the released data
+| path | what it does |
+|---|---|
+| `scripts/01-04*, build_*, oracle_*` | dataset construction: seeding, oracle generation, three-condition verification, splits |
+| `scripts/61, 49, 18-19*, 78-79` | evaluation harness: the three-condition measurement, capability benchmarks |
+| `scripts/54, 63-64, 45, 86, 94, 100-102, 124-125` | the grounding-strength relation, the margin mechanism, placebo and covariate controls |
+| `scripts/75, 95-96, 99, 128, 135, 85, 87, 98, 103-106` | mitigation: the robustness vector and every baseline (prompting, chain-of-thought, M3ID, representation edits, patching) |
+| `scripts/05, 08, build_pretraining_diversified, 06-14*` | SAE pretraining corpus, training, feature analysis |
+| `scripts/108-109, 126-129` | human-audit tooling and analysis |
+| `scripts/136-137` | builders that produced the released dataset and SAE bundles |
+| `src/sae_steering/` | shared library: model loading, steering hooks, SAE, oracle clients |
+| `configs/` | per-batch generation configs |
 
-The curated release is `data/release/` (see its own `README.md` and `MANIFEST.json`): `moground/`
-with per-item `pass_v` / `pass_t` / `pass_vt` certificates and the fixed splits,
-`moground_human/`, `assembled/` post-audit, plus the 250 human-audit labels. To score your own
-model, run each item three times (image only, text only, both) and condition as above; nothing in
-the metric is specific to our backbones.
+## Reproducing the headline numbers
 
-## Reproducing the pipeline
+1. Evaluate a backbone on a pool: `python scripts/61_behavioral_eval.py --model qwen --pool dm`
+   (three conditions per item, writes one JSONL per run).
+2. Fine-tune the robustness vector: `python scripts/75_finetune_distraction.py --model qwen`
+   (LoRA rank 16 on attention only; the merged low-rank update is the vector).
+3. Apply at strength `w` and re-evaluate: the vector enters the forward pass linearly, so
+   `base + w·Δ` needs no retraining.
+4. Baselines: `95_cot_baseline.py`, `96_prompt_baseline.py`, `128_m3id_baseline.py`, and the
+   representation edits in `13_sae_steering.py` / `87_dense_control.py` / `98_universal_patch.py`.
 
-Scripts are numbered by pipeline stage; each has a docstring with its exact invocation.
+## License
 
-| stage | scripts | what it does |
-|---|---|---|
-| build | `01_build_seeds*` -> `02_prepare_oracle_generation` -> `03_prepare_oracle_answer` | seed images, oracle question generation, three-condition answering |
-| certify | `04_*` behavioral filters, `05_*` | keep only single-modality signatures |
-| evaluate | `49_t8_collect`, `50_t8_score`, `61_behavioral_eval` | three-condition scoring for any backbone (`61` is the general entry point) |
-| analyze | `54_grounding_strength`, `68_forecast_holdout`, `86_stats_hardening` | the grounding relation, leave-one-model-out forecasts, bootstrap CIs |
-| mitigate | `76_adversarial_captions` -> `75_finetune_distraction` -> `78_benchmark_capability` | adversarial captions, LoRA training, capability evaluation |
+Code is released under the MIT license. The dataset annotations are CC BY-NC 4.0, and the image
+sources keep their own terms — see the dataset card for the per-source table.
 
-Adding a backbone usually means one entry in the `REGISTRY` of `61_behavioral_eval.py`; the
-analysis scripts glob over evaluation keys and pick it up.
+## Citation
 
-## Caveats
-
-* Certification is **operational**: single-modality answerability holds relative to the oracles
-  used, not as absolute ground truth. A cross-oracle replication agrees at 94%, and a 250-item
-  human audit passes 93.6%.
-* Distraction rates on the Qwen2-VL family are sensitive to the Transformers version (dynamic
-  resolution image handling); compare numbers only within a fixed environment. Ours is PyTorch
-  2.11 / Transformers 5.6.
+```bibtex
+@article{zhou2026moground,
+  title={MoGround: Measuring and Mitigating Modality Distraction in Vision-Language Models},
+  author={Zhou, Luca and Zhao, Bo and Yu, Rose and Rodol\`a, Emanuele and Dess\`i, Roberto},
+  year={2026}
+}
+```
