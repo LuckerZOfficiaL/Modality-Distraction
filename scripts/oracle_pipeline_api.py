@@ -43,7 +43,7 @@ from moground.oracle_prompts import (
 # enforce identical C1 / bridge-structural constraints.
 import importlib.util as _ilu
 _spec = _ilu.spec_from_file_location(
-    "_pp02b", Path(__file__).parent / "02b_postprocess_generation.py")
+    "_pp02b", Path(__file__).parent / "postprocess_generation.py")
 _pp02b = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_pp02b)  # type: ignore
 verify_text_block = _pp02b.verify_text_block
 
@@ -455,7 +455,7 @@ def main():
     dm_dir = Path(cfg["paths"]["dm_dir"])
     seed = int(cfg["seed"])
 
-    # Pick the generation prompt the same way 02_prepare_oracle_generation.py does,
+    # Pick the generation prompt the same way prepare_oracle_generation.py does,
     # so the Gemini pipeline matches the subagent pipeline byte-for-byte on prompt.
     hard_t = bool(cfg.get("seeds", {}).get("hard_t", True))
     t_only = bool(cfg.get("seeds", {}).get("t_only", False))

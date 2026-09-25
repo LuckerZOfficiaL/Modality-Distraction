@@ -64,26 +64,29 @@ mkdir -p .credentials          # put your Gemini / Anthropic keys here; see scri
 
 | path | what it does |
 |---|---|
-| `scripts/01-04*, build_*, oracle_*` | dataset construction: seeding, oracle generation, three-condition verification, splits |
-| `scripts/61, 49, 18-19*, 78-79` | evaluation harness: the three-condition measurement, capability benchmarks |
-| `scripts/54, 63-64, 45, 86, 94, 100-102, 124-125` | the grounding-strength relation, the margin mechanism, placebo and covariate controls |
-| `scripts/75, 95-96, 99, 128, 135, 85, 87, 98, 103-106` | mitigation: the robustness vector and every baseline (prompting, chain-of-thought, M3ID, representation edits, patching) |
-| `scripts/05, 08, build_pretraining_diversified, 06-14*` | SAE pretraining corpus, training, feature analysis |
-| `scripts/108-109, 126-129` | human-audit tooling and analysis |
-| `scripts/136-137` | builders that produced the released dataset and SAE bundles |
+| `scripts/build_seeds*, prepare_oracle_*, oracle_*, vlm_behavioral_filter*, build_*` | dataset construction: seeding, oracle generation, three-condition verification, splits |
+| `scripts/behavioral_eval.py, t8_collect.py, canonical_eval.py, benchmark_*, prep_*` | evaluation harness: the three-condition measurement, capability benchmarks |
+| `scripts/grounding_strength.py, grounding_knob*, margin_model.py, logit_lens_distraction.py, *_controls.py, placebo_*` | the grounding-strength relation, the margin mechanism, placebo and covariate controls |
+| `scripts/finetune_distraction.py, cot_*, prompt_baseline.py, m3id_*, gated_*, dense_control.py, universal_patch.py, gate*` | mitigation: the robustness vector and every baseline |
+| `scripts/train_sae.py, download_cc3m_subset.py, build_pretraining_diversified.py, collect_*_activations*, sae_*, identify_features*, train_probes*` | SAE pretraining corpus, training, feature analysis |
+| `scripts/validation_analysis.py, *audit*` | human-audit tooling and analysis |
+| `scripts/build_public_release.py, build_sae_release.py` | builders that produced the released dataset and SAE bundles |
 | `src/moground/` | shared library: model loading, steering hooks, SAE, oracle clients |
 | `configs/` | per-batch generation configs |
 
-## Reproducing the headline numbers
+## Getting the numbers
 
-1. Evaluate a backbone on a pool: `python scripts/61_behavioral_eval.py --model qwen --pool dm`
+1. Evaluate a backbone on a pool: `python scripts/behavioral_eval.py --model qwen --pool dm`
    (three conditions per item, writes one JSONL per run).
-2. Fine-tune the robustness vector: `python scripts/75_finetune_distraction.py --model qwen`
+2. Fine-tune the robustness vector: `python scripts/finetune_distraction.py --model qwen`
    (LoRA rank 16 on attention only; the merged low-rank update is the vector).
 3. Apply at strength `w` and re-evaluate: the vector enters the forward pass linearly, so
    `base + w·Δ` needs no retraining.
-4. Baselines: `95_cot_baseline.py`, `96_prompt_baseline.py`, `128_m3id_baseline.py`, and the
-   representation edits in `13_sae_steering.py` / `87_dense_control.py` / `98_universal_patch.py`.
+4. Baselines: `cot_baseline.py`, `prompt_baseline.py`, `m3id_baseline.py`, and the
+   representation edits in `sae_steering.py` / `dense_control.py` / `universal_patch.py`.
+
+Each run writes per-item predictions as JSONL. Computing the distraction rates from them is the
+two-line conditional above. No table or figure rendering ships here.
 
 ## License
 

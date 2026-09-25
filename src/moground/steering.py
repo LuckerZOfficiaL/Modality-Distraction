@@ -50,7 +50,7 @@ def build_messages(row: dict, max_pixels: int = CANONICAL_MAX_PIXELS) -> list[di
 
     All steering / baseline / patching scripts go through this function, so any
     forward pass produced via the project's helpers is aligned with the
-    cf-store baseline produced by ``06c_collect_dm_counterfactual_activations.py``.
+    cf-store baseline produced by ``collect_dm_counterfactual_activations.py``.
     Do not change the default without invalidating prior canonical numbers.
 
     Supports a variable number of options (``row["options"]`` of length 2--6) and

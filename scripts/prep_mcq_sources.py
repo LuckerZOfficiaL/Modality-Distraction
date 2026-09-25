@@ -11,7 +11,7 @@ Supported sources:
                         least-plausible distractor to fit 4-way)
 
 Outputs all splits (train + val + test) concatenated to a single jsonl, since
-construction-time partitioning is handled by 04h_register_text_qa_dataset.py.
+construction-time partitioning is handled by register_text_qa_dataset.py.
 
 Usage:
   python scripts/prep_mcq_sources.py --source race-high   --out data/raw/race_high.jsonl

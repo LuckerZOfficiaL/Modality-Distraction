@@ -338,7 +338,7 @@ def compare_to_baseline(method_jsonl: Path, pool: str = "unseen",
     if not baseline_jsonl.exists():
         raise FileNotFoundError(
             f"Canonical baseline for pool='{pool}' not found at {baseline_jsonl}. "
-            f"Run scripts/18_canonical_eval.py --methods baseline --pool {pool} first."
+            f"Run scripts/canonical_eval.py --methods baseline --pool {pool} first."
         )
     base = {r["candidate_id"]: r for r in (json.loads(l) for l in baseline_jsonl.read_text().splitlines() if l.strip())}
     meth = {r["candidate_id"]: r for r in (json.loads(l) for l in method_jsonl.read_text().splitlines() if l.strip())}

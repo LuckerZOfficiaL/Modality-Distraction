@@ -87,7 +87,7 @@ def main() -> None:
     print(f"\nwrote {len(merged_all)} total rows -> {out_root / 'dm_all.jsonl'}")
     if args.seed_pass_from_splits:
         print("pass/{train,val}.jsonl seeded from splits/ (skip step 04 if you trust the "
-              "construction-validation; otherwise run 04_vlm_behavioral_filter.py on this dir).")
+              "construction-validation; otherwise run vlm_behavioral_filter.py on this dir).")
 
 
 if __name__ == "__main__":
