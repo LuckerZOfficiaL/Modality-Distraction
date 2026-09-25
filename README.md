@@ -89,13 +89,3 @@ mkdir -p .credentials          # put your Gemini / Anthropic keys here; see scri
 
 Code is released under the MIT license. The dataset annotations are CC BY-NC 4.0, and the image
 sources keep their own terms — see the dataset card for the per-source table.
-
-## Citation
-
-```bibtex
-@article{zhou2026moground,
-  title={MoGround: Measuring and Mitigating Modality Distraction in Vision-Language Models},
-  author={Zhou, Luca and Zhao, Bo and Yu, Rose and Rodol\`a, Emanuele and Dess\`i, Roberto},
-  year={2026}
-}
-```
