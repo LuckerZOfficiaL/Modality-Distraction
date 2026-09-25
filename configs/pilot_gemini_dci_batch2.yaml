@@ -1,0 +1,27 @@
+seed: 0
+
+paths:
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/gemini/batch2
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
+  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
+  runs: /home/ubuntu/thesis/sae_steering/runs
+
+seeds:
+  source: dci
+  num_seeds: 600
+  captions_per_image: 1
+  hard_t: true   # tightened C1-C7 + two-stage bridge
+  t_only: true   # T-only generation (skip V MCQ)
+
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+
+sae:
+  sparsity: topk
+  k: 32
+  width_mult: 8
+
+dm:
+  target_per_class: 100
+  split: [0.6, 0.2, 0.2]

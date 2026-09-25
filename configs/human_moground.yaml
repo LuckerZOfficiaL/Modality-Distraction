@@ -1,0 +1,32 @@
+dm:
+  split:
+  - 0.6
+  - 0.2
+  - 0.2
+  target_per_class: 100
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+paths:
+  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/diversified_v1
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: data/dm/human_moground
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
+  runs: /home/ubuntu/thesis/sae_steering/runs
+sae:
+  k: 32
+  sparsity: topk
+  width_mult: 8
+seed: 0
+seeds:
+  captions_per_image: 1
+  num_seeds: 7000
+  source: dci
+tcounterparts_v2:
+  extract_temperature: 0.0
+  gen_temperature: 0.4
+  max_pool: 40
+  min_object_freq: 2
+  out_dir: /home/ubuntu/thesis/sae_steering/data/dm/multidomain_v1/tcounterparts_v2
+  splits:
+  - train
+  - val

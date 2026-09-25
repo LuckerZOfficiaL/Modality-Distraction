@@ -1,0 +1,11 @@
+# Placebo-caption ladder (scripts/124). Internal; VT condition only (scripts/61 --conds VT).
+dm:
+  split: [0.6, 0.2, 0.2]
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+paths:
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: data/dm/placebo_v1
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
+  runs: /home/ubuntu/thesis/sae_steering/runs
+seed: 0

@@ -1,0 +1,26 @@
+seed: 0
+
+paths:
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/semart/batch500
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/semart/images
+  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
+  runs: /home/ubuntu/thesis/sae_steering/runs
+
+seeds:
+  source: dci      # use generic-photo prompt; no semart-specific prompt exists yet
+  num_seeds: 500
+  captions_per_image: 1
+  hard_t: false
+
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+
+sae:
+  sparsity: topk
+  k: 32
+  width_mult: 8
+
+dm:
+  target_per_class: 100
+  split: [0.6, 0.2, 0.2]

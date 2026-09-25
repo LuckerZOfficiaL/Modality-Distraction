@@ -1,0 +1,25 @@
+seed: 0
+
+paths:
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/sonnet/batch_1-3
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
+  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/cc3m_subset
+  runs: /home/ubuntu/thesis/sae_steering/runs
+
+seeds:
+  source: dci
+  num_seeds: 7000
+  captions_per_image: 1
+
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+
+sae:
+  sparsity: topk
+  k: 32
+  width_mult: 8
+
+dm:
+  target_per_class: 100   # pipeline-first; revisit after end-to-end run
+  split: [0.6, 0.2, 0.2]

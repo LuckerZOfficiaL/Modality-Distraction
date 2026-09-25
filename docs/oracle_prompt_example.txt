@@ -1,0 +1,251 @@
+================================================================================
+EXAMPLE 1 — V+T mode (one prompt that generates BOTH a V-grounded and a
+            T-grounded MCQ for the same image+caption pair)
+================================================================================
+
+[SYSTEM]
+You are an oracle building multiple-choice questions for a vision-language model
+study on modality preference. For each image you see, you must produce TWO
+4-option multiple-choice questions, each grounded in exactly one modality.
+
+[USER INSTRUCTIONS]
+The original_caption you are given is a DENSE descriptive paragraph (often
+several sentences) that already enumerates many visible attributes — colors,
+counts, clothing, materials, spatial layout, background objects. Design both
+questions with that in mind: a generic perceptual question (e.g. "what color
+is the shirt") will usually fail the modality-isolation test on dense
+captions because the caption already states the answer.
+
+For the image you are given, together with its original caption, produce the
+following JSON object:
+
+{
+  "vision": {
+    "question": "...",
+    "options": ["...", "...", "...", "..."],
+    "correct_index": <0|1|2|3>,
+    "rationale": "brief reason answer is only in the image"
+  },
+  "text": {
+    "augmented_caption": "<original caption> + one short sentence adding a fact not visible in the image",
+    "question": "...",
+    "options": ["...", "...", "...", "..."],
+    "correct_index": <0|1|2|3>,
+    "rationale": "brief reason answer is only in the augmented caption"
+  }
+}
+
+Rules for the VISION-grounded MCQ:
+- The answer must be obtainable ONLY from the image. The dense caption must NOT
+  already state or strongly imply the answer.
+- Productive targets on dense captions: exact text written on signs / labels /
+  packaging, brand names visible but not transcribed, fine-grained counts of
+  items the caption describes only generically, micro-expressions, exact shade
+  vs. caption's coarse color word, items present in the background that the
+  caption omits, exact spatial relations not stated, gestures, gaze direction,
+  reflections, lighting / time-of-day cues, weather.
+- Before finalizing, RE-READ the original caption: if your candidate question's
+  answer is even loosely derivable from the caption text, pick a different
+  detail.
+- Distractors must be plausible under the caption but wrong given the image.
+
+Rules for the TEXT-grounded MCQ (HARD-T variant — answer is NOT literal in the caption):
+The answer must be derivable from the augmented caption ALONE via ONE small
+reasoning step, and MUST NOT be a verbatim or near-verbatim substring of the
+caption. Pick exactly one style per seed; vary across seeds.
+
+STYLE A — one-hop named-entity / world-knowledge bridge:
+    Caption mentions a referent X (named entity, programme, indicator, location,
+    methodology). Question asks for an attribute f(X) that is unambiguous given
+    X but NOT spelled out anywhere in the caption.
+        caption: "...Lloyds Bank branch in the square..."
+          Q: "In which country is that bank headquartered?"  A: "United Kingdom"
+          (NOT a literal span: "United Kingdom" is nowhere in the caption.)
+        caption: "...rusty H-frame oil pumpjack on a Texas plain..."
+          Q: "What does that machinery extract from the ground?"  A: "petroleum"
+        caption: "...the woman in a sari at a Holi celebration..."
+          Q: "In which country does this festival originate?"  A: "India"
+
+STYLE B — one-hop temporal / numeric / relational computation:
+    Caption supplies inputs; question asks for the output of ONE arithmetic
+    / ordering / kinship / unit-conversion step. The result must NOT appear
+    verbatim in the caption.
+        caption: "...the bridge, built in 1937, was renovated 60 years later..."
+          Q: "Approximately in which decade was the renovation?"  A: "1990s"
+          (NOT literal: "1990s" / "1997" not in caption.)
+        caption: "...his nephew's daughter is the girl on the right..."
+          Q: "What is the man's relation to the girl?"  A: "great-uncle"
+        caption: "...the marathon, run on a 42-km loop, was completed in 3 hours 30 minutes..."
+          Q: "Approximately what was the average pace?"  A: "5 minutes per km"
+
+HARD CONSTRAINTS (verify each one before writing):
+  C1. The correct-answer string (case-insensitive) MUST NOT appear as a
+      contiguous substring in augmented_caption. If it does, REWRITE the
+      question or pick a different bridge. Postprocessing enforces this
+      mechanically and DROPS violating rows — there is no second chance.
+  C2. None of the correct-answer string's distinguishing word stems (the
+      unique noun/proper-noun/numeral that identifies it) may appear in
+      augmented_caption. E.g., if the answer is "United Kingdom", neither
+      "United Kingdom", "UK", nor "Britain" may be in the caption.
+  C3. The bridge must require a step a careful reader of just the caption
+      can perform with general knowledge or basic arithmetic — but a literal
+      keyword search of the caption alone CANNOT surface the answer string.
+  C4. The bridge's INPUTS (the referent X in Style A, the numerical/relational
+      inputs in Style B) MUST be present in augmented_caption — either in the
+      original caption or in your injected fact. Make sure they are unambiguous.
+  C5. The injected fact must NOT itself be a paraphrase of the answer. E.g.,
+      if the answer is "January 5th", do not write "the parade is held in
+      early January" — that's just an answer paraphrase. Instead make the
+      caption mention a referent whose attribute IS January 5th (e.g.,
+      "Cabalgata de Reyes Magos") and let the reader bridge to the date.
+  C6. The bridge must NOT be derivable from the IMAGE alone. Pick attributes
+      that are extra-visual (year, country, institution, kinship, etc.).
+  C7. In the rationale, explicitly name the bridge step ("Style A: X →
+      attribute Y" or "Style B: 1978 + 40 = 2018") AND state that the
+      answer does not appear in augmented_caption.
+
+Inject the bridge inputs into the caption using natural placement (apposition,
+parenthetical, inline modifier, relative clause, or separate sentence). Vary
+placement across seeds. Preserve all original caption content.
+
+Distractors: same category as the correct answer, plausible under the caption,
+but contradicting the one-hop result. For Style B, distractors should be
+near-miss numerical / temporal values within plausible range.
+
+MODALITY-AGNOSTIC PHRASING (MANDATORY for BOTH questions):
+- The question MUST NOT contain any of these words or close synonyms:
+  "image", "picture", "photo", "photograph", "caption", "text", "description",
+  "shown", "depicted", "visible", "pictured", "displayed", "according to",
+  "based on", "in the [image|caption|text|photo|picture]".
+- Phrase the question as if asking about the underlying situation, subject, scene,
+  or event itself, not about a medium. Read alone (without the image and without
+  the caption), a human reader must NOT be able to tell which modality holds the
+  answer.
+  GOOD: "What color is the dog's collar?", "In what year did this take place?",
+        "How many people are present?", "Which city is this in?".
+  BAD:  "What is shown in the image?", "According to the caption, what year...?",
+        "What is depicted in the photo?", "What does the description say about...?".
+- The vision-grounded and text-grounded questions for the same seed should be
+  phrased in symmetric, modality-neutral language; only the underlying answer
+  location (image vs. injected caption fact) differs.
+
+Global rules:
+- Exactly 4 options per MCQ. No letter prefixes (no "A)", "B)"); just the option strings.
+- Options must be short (<= 12 words) and mutually exclusive.
+- correct_index is 0-based.
+- Output VALID JSON only, nothing else. No markdown code fence.
+
+
+================================================================================
+EXAMPLE 2 — T-only HARD-T mode (current default; only the T MCQ; uses the
+            two-stage bridge_entity / derived_fact schema)
+================================================================================
+
+[USER INSTRUCTIONS]
+You are an oracle building a single TEXT-grounded multiple-choice question for a
+vision-language model study on modality preference. For each image you see, you
+must produce ONE 4-option MCQ whose answer is grounded in an injected caption fact
+requiring ONE-HOP reasoning (NOT a literal span of the caption).
+
+The original_caption is a DENSE descriptive paragraph.
+
+Generate in TWO STAGES (both stages must appear in your JSON output):
+
+STAGE 1 — propose the bridge:
+  - bridge_entity: the referent X (Style A) or input value (Style B) that you will
+    inject into / point to in the caption. MUST be a phrase that will appear
+    verbatim (case-insensitive) in augmented_caption.
+  - derived_fact: the answer the reader must produce by applying ONE reasoning step
+    to bridge_entity. MUST NOT be a substring of augmented_caption.
+
+STAGE 2 — write the MCQ around (bridge_entity, derived_fact):
+  - augmented_caption: original caption with bridge_entity present (either already
+    there or injected). derived_fact must NOT appear anywhere in it.
+  - options: 4 plausible candidates of the same category as derived_fact;
+    options[correct_index] MUST equal derived_fact verbatim.
+
+Output ONLY the "text" block — DO NOT output a "vision" block, the V-grounded
+questions for these images already exist:
+
+{
+  "text": {
+    "bridge_entity": "<phrase that IS in augmented_caption>",
+    "derived_fact": "<the answer; MUST NOT be in augmented_caption>",
+    "augmented_caption": "<original caption> + injected fact(s) needed for the bridge",
+    "question": "...",
+    "options": ["...", "...", "...", "..."],
+    "correct_index": <0|1|2|3>,
+    "rationale": "name the bridge step explicitly (Style A: X -> attribute Y, or Style B: arithmetic). Confirm the answer string is NOT a verbatim substring of augmented_caption."
+  }
+}
+
+Postprocessing mechanically drops rows where:
+  - derived_fact (or options[correct_index]) appears in augmented_caption, or
+  - bridge_entity does NOT appear in augmented_caption, or
+  - options[correct_index] != derived_fact.
+There is no second chance — produce a clean row on the first try or pick a
+different bridge.
+
+Rules for the TEXT-grounded MCQ (HARD-T):
+
+The answer must be derivable from the augmented caption ALONE via ONE small
+reasoning step, and MUST NOT be a verbatim or near-verbatim substring of the
+caption. Pick exactly one style per seed; vary across seeds.
+
+STYLE A — one-hop named-entity / world-knowledge bridge:
+    Caption mentions a referent X (named entity, programme, indicator, location,
+    methodology). Question asks for an attribute f(X) that is unambiguous given
+    X but NOT spelled out anywhere in the caption.
+        caption: "...Lloyds Bank branch in the square..."
+          Q: "In which country is that bank headquartered?"  A: "United Kingdom"
+          (NOT a literal span: "United Kingdom" is nowhere in the caption.)
+        caption: "...rusty H-frame oil pumpjack on a Texas plain..."
+          Q: "What does that machinery extract from the ground?"  A: "petroleum"
+        caption: "...the woman in a sari at a Holi celebration..."
+          Q: "In which country does this festival originate?"  A: "India"
+
+STYLE B — one-hop temporal / numeric / relational computation:
+    Caption supplies inputs; question asks for the output of ONE arithmetic
+    / ordering / kinship / unit-conversion step. The result must NOT appear
+    verbatim in the caption.
+        caption: "...the bridge, built in 1937, was renovated 60 years later..."
+          Q: "Approximately in which decade was the renovation?"  A: "1990s"
+          (NOT literal: "1990s" / "1997" not in caption.)
+        caption: "...his nephew's daughter is the girl on the right..."
+          Q: "What is the man's relation to the girl?"  A: "great-uncle"
+        caption: "...the marathon, run on a 42-km loop, was completed in 3 hours 30 minutes..."
+          Q: "Approximately what was the average pace?"  A: "5 minutes per km"
+
+HARD CONSTRAINTS (verify each one before writing):
+  C1. The correct-answer string (case-insensitive) MUST NOT appear as a
+      contiguous substring in augmented_caption. If it does, REWRITE the
+      question or pick a different bridge. Postprocessing enforces this
+      mechanically and DROPS violating rows — there is no second chance.
+  C2. None of the correct-answer string's distinguishing word stems (the
+      unique noun/proper-noun/numeral that identifies it) may appear in
+      augmented_caption. E.g., if the answer is "United Kingdom", neither
+      "United Kingdom", "UK", nor "Britain" may be in the caption.
+  C3. The bridge must require a step a careful reader of just the caption
+      can perform with general knowledge or basic arithmetic — but a literal
+      keyword search of the caption alone CANNOT surface the answer string.
+  C4. The bridge's INPUTS (the referent X in Style A, the numerical/relational
+      inputs in Style B) MUST be present in augmented_caption — either in the
+      original caption or in your injected fact. Make sure they are unambiguous.
+  C5. The injected fact must NOT itself be a paraphrase of the answer. E.g.,
+      if the answer is "January 5th", do not write "the parade is held in
+      early January" — that's just an answer paraphrase. Instead make the
+      caption mention a referent whose attribute IS January 5th (e.g.,
+      "Cabalgata de Reyes Magos") and let the reader bridge to the date.
+  C6. The bridge must NOT be derivable from the IMAGE alone. Pick attributes
+      that are extra-visual (year, country, institution, kinship, etc.).
+  C7. In the rationale, explicitly name the bridge step ("Style A: X →
+      attribute Y" or "Style B: 1978 + 40 = 2018") AND state that the
+      answer does not appear in augmented_caption.
+
+Inject the bridge inputs into the caption using natural placement (apposition,
+parenthetical, inline modifier, relative clause, or separate sentence). Vary
+placement across seeds. Preserve all original caption content.
+
+Distractors: same category as the correct answer, plausible under the caption,
+but contradicting the one-hop result. For Style B, distractors should be
+near-miss numerical / temporal values within plausible range.

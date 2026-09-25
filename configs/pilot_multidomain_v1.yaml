@@ -1,0 +1,35 @@
+seed: 0
+
+paths:
+  data_root: /home/ubuntu/thesis/sae_steering/data
+  dm_dir: /home/ubuntu/thesis/sae_steering/data/dm/multidomain_v1
+  dm_images: /home/ubuntu/thesis/sae_steering/data/dm/images
+  cc3m_dir: /home/ubuntu/thesis/sae_steering/data/pretraining/diversified_v1
+  runs: /home/ubuntu/thesis/sae_steering/runs
+
+seeds:
+  source: dci
+  num_seeds: 7000
+  captions_per_image: 1
+
+model:
+  name: Qwen/Qwen2.5-VL-3B-Instruct
+
+sae:
+  sparsity: topk
+  k: 32
+  width_mult: 8
+
+dm:
+  target_per_class: 100
+  split: [0.6, 0.2, 0.2]
+
+# De-confounded T-counterpart generation v2 (scripts/25): object-vocabulary
+# matching + symmetric V-decoy assertions. See project_log "De-Confounding T".
+tcounterparts_v2:
+  splits: [train, val]          # V oracle-survivor splits to draw from
+  min_object_freq: 2            # keep objects appearing >= this often per source in the collection
+  max_pool: 40                  # max candidate objects shown to the oracle per item
+  extract_temperature: 0.0      # object extraction (deterministic)
+  gen_temperature: 0.4          # counterpart generation
+  out_dir: /home/ubuntu/thesis/sae_steering/data/dm/multidomain_v1/tcounterparts_v2

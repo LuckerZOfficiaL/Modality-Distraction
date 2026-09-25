@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.venv/
+.credentials/
+data/
+runs/
+out/
+*.pt
+*.npy
+*.bak*
+.ipynb_checkpoints/
+nohup.out
